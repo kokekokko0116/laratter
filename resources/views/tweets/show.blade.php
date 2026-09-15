@@ -31,5 +31,20 @@
                 </form>
             @endif
         </div>
+        {{-- 🔽 追加 --}}
+        <div class="mt-4">
+            <p class="text-sm text-gray-500">comment {{ $tweet->comments->count() }}</p>
+            <a href="{{ route('tweets.comments.create', $tweet) }}"
+                class="text-blue-500 hover:text-blue-700">コメントする</a>
+        </div>
+        {{-- 🔽 追加 --}}
+        <div class="mt-4">
+            @foreach ($tweet->comments as $comment)
+                <a href="{{ route('tweets.comments.show', [$tweet, $comment]) }}">
+                    <p>{{ $comment->comment }} <span class="text-sm text-gray-500">{{ $comment->user->name }}
+                            {{ $comment->created_at->format('Y-m-d H:i') }}</span></p>
+                </a>
+            @endforeach
+        </div>
     </div>
 </x-layouts.app>
