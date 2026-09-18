@@ -167,4 +167,48 @@ class TweetTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect('/tweets');
     }
+    // キーワードを含むツイートを検索できることを確認
+    public function test_can_search_tweets_by_content_keyword(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        // キーワードを含むツイートを作成
+        Tweet::factory()->create([
+            'tweet' => 'This is a test tweet',
+            'user_id' => $user->id,
+        ]);
+
+        // キーワードを含まないツイートを作成
+        Tweet::factory()->create([
+            'tweet' => 'This is another tweet',
+            'user_id' => $user->id,
+        ]);
+
+        // キーワード "test" で検索
+        $response = $this->get(route('tweets.search', ['keyword' => 'test']));
+
+        $response->assertStatus(200);
+        $response->assertSee('This is a test tweet');
+        $response->assertDontSee('This is another tweet');
+    }
+
+    // 一致するツイートがない場合のテスト
+    public function test_shows_no_tweets_if_no_match_found(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        Tweet::factory()->create([
+            'tweet' => 'This is a tweet',
+            'user_id' => $user->id,
+        ]);
+
+        // 存在しないキーワードで検索
+        $response = $this->get(route('tweets.search', ['keyword' => 'nonexistent']));
+
+        $response->assertStatus(200);
+        $response->assertDontSee('This is a tweet');
+        $response->assertSee('No tweets found.');
+    }
 }

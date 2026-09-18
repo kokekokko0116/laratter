@@ -78,4 +78,15 @@ class TweetController extends Controller
 
         return redirect()->route('tweets.index');
     }
+
+    public function search(Request $request)
+    {
+        // モデルの keyword スコープで絞り込み，ページネーションを追加（1ページに10件表示）
+        $tweets = Tweet::keyword($request->keyword)
+            ->latest()
+            ->paginate(10);
+
+
+        return view('tweets.search', compact('tweets'));
+    }
 }

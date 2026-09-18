@@ -21,7 +21,10 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 
+    Route::get('/tweets/search', [TweetController::class, 'search'])->name('tweets.search');
     Route::resource('tweets', TweetController::class);
+
+
     Route::post('/tweets/{tweet}/like', [TweetLikeController::class, 'store'])->name('tweets.like');
     Route::delete('/tweets/{tweet}/like', [TweetLikeController::class, 'destroy'])->name('tweets.dislike');
     Route::resource('tweets.comments', CommentController::class);

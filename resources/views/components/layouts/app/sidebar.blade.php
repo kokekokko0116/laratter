@@ -27,6 +27,11 @@
                 :current="request()->routeIs('tweets.create')" wire:navigate>
                 {{ __('Tweet作成') }}
             </flux:navlist.item>
+
+            <flux:navlist.item icon="magnifying-glass" :href="route('tweets.search')"
+                :current="request()->routeIs('tweets.search')" wire:navigate>
+                {{ __('Tweet検索') }}
+            </flux:navlist.item>
         </flux:navlist>
 
 
