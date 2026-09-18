@@ -4,7 +4,9 @@
         @foreach ($tweets as $tweet)
             <div class="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
                 <p>{{ $tweet->tweet }}</p>
-                <p class="text-sm text-gray-500">投稿者: {{ $tweet->user->name }}</p>
+                <a href="{{ route('profile.show', $tweet->user) }}">
+                    <p class="text-sm text-gray-500">投稿者: {{ $tweet->user->name }}</p>
+                </a>
                 <a href="{{ route('tweets.show', $tweet) }}" class="text-blue-500 hover:text-blue-700">詳細を見る</a>
                 <div class="flex mt-2">
                     @if ($tweet->liked->contains(auth()->id()))

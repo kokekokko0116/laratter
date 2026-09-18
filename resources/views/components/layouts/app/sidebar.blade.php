@@ -32,6 +32,11 @@
                 :current="request()->routeIs('tweets.search')" wire:navigate>
                 {{ __('Tweet検索') }}
             </flux:navlist.item>
+
+            <flux:navlist.item icon="user" :href="route('profile.show', auth()->user())"
+                :current="request()->routeIs('profile.show')" wire:navigate>
+                {{ __('マイページ') }}
+            </flux:navlist.item>
         </flux:navlist>
 
 
