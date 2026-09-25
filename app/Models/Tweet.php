@@ -46,4 +46,11 @@ class Tweet extends Model
             // $query->where('tweet', $keyword);
         });
     }
+
+    public function scopeTimeline(Builder $query, User $user): Builder
+    {
+        return $query
+            ->where('user_id', $user->id) // 自分の Tweet
+            ->orWhereIn('user_id', $user->follows->pluck('id')); // フォローしているユーザの Tweet
+    }
 }

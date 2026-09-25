@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tweet;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -36,7 +37,18 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        return view('profile.show', compact('user'));
+        if (auth()->user()->is($user)) {
+            // 自分のページ：自分とフォローしているユーザの Tweet を取得
+            $tweets = Tweet::timeline($user)->latest()->paginate(10);
+        } else {
+            // 他のユーザのページ：そのユーザの Tweet のみを取得
+            $tweets = $user->tweets()->latest()->paginate(10);
+        }
+
+        // ユーザのフォロワーとフォローしているユーザを取得
+        $user->load(['follows', 'followers']);
+
+        return view('profile.show', compact('user', 'tweets'));
     }
 
     /**
